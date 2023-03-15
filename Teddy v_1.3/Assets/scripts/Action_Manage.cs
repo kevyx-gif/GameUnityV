@@ -51,8 +51,9 @@ public class Action_Manage : MonoBehaviour {
 			var lookPos = Target.transform.position - transform.position;
 			lookPos.y = 0;
 			var rotation = Quaternion.LookRotation(lookPos);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 3);
 			animator.SetBool("atackMoment",false);
+			animator.SetBool("walk",false);
 			animator.SetBool("run",true);
 			transform.Translate(Vector3.forward * 2 * Time.deltaTime);
 		}

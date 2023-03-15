@@ -274,6 +274,34 @@ MonoBehaviour:
   cronometro: 0
   angulo: {x: 0, y: 0, z: 0, w: 0}
   grado: 0
+--- !u!111 &702506115
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702506103}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
+--- !u!65 &702506116
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702506103}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 2.09, y: 0.51, z: 0.48}
+  m_Center: {x: 0.02, y: 0.66, z: 0.79}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,6 +516,7 @@ MonoBehaviour:
   camera: {fileID: 963194228}
   speed: 4
   gravity: -9.8
+  jumpforce: 0
 --- !u!143 &1486505252
 CharacterController:
   m_ObjectHideFlags: 0
