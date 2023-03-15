@@ -55,8 +55,12 @@ public class playerControl : MonoBehaviour
         movement.y += gravity + Time.deltaTime;
 
         if (characterController.isGrounded && Input.GetButtonDown("Jump")){
-            movement.y = jumpforce;
+            movement.y = -jumpforce + Time.deltaTime;
             animator.SetBool("jump",true);
+            animator.SetBool("infloor",false);
+        }
+
+        else if(!characterController.isGrounded){
             animator.SetBool("infloor",false);
         }
 
