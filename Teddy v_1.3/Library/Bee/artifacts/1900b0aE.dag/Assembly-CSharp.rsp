@@ -351,6 +351,7 @@
 "Assets/FarlandSkies/Demo/Scripts/Skybox/SkyboxRotator.cs"
 "Assets/scripts/Action_Manage.cs"
 "Assets/scripts/CameraOrb.cs"
+"Assets/scripts/controlJugador.cs"
 "Assets/scripts/playerControl.cs"
 "Assets/TAZO_3D_C/DemoScene/demo.cs"
 -langversion:9.0
