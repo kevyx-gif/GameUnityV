@@ -8,6 +8,7 @@ public class controlJugador : MonoBehaviour
     private new Rigidbody rigidbody;
     private float jumpForce = 5;
     private bool injump;
+    private bool inAttack;
 
     public new Transform camera;
     public float speed = 4;
@@ -30,6 +31,11 @@ public class controlJugador : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space)){
             injump = true;
             animator.SetTrigger("jump");
+        }
+
+        if(Input.GetKeyDown(KeyCode.Mouse0)){
+            inAttack = true;
+            animator.SetTrigger("attack");
         }
 
 
@@ -62,11 +68,16 @@ public class controlJugador : MonoBehaviour
 
 
     private void FixedUpdate(){
-        if(injump){
+        if(injump && animator.GetBool("infloor") == true){
             rigidbody.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
             injump = false;
             animator.ResetTrigger("jump");
             animator.SetBool("infloor",false);
+        }
+
+        if(inAttack){
+            inAttack = false;
+            animator.ResetTrigger("attack");
         }
     }
 

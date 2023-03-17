@@ -9,6 +9,7 @@ public class Action_Manage : MonoBehaviour {
 	public float cronometro;
 	public Quaternion angulo;
 	public float grado;
+	float movementspeed = 0;
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator>();
@@ -32,6 +33,7 @@ public class Action_Manage : MonoBehaviour {
 			switch (rutina)
 			{
 				case 0:
+					movementspeed = 0;
 					animator.SetBool("walk",false);
 					break;
 				case 1:
@@ -40,14 +42,16 @@ public class Action_Manage : MonoBehaviour {
 					rutina++;
 					break;
 				case 2:
+					movementspeed = 1;
 					transform.rotation = Quaternion.RotateTowards(transform.rotation, angulo, 0.5f);
-					transform.Translate(Vector3.forward * 1 * Time.deltaTime);
+					transform.Translate(Vector3.forward * movementspeed * Time.deltaTime);
 					animator.SetBool("walk",true);
 					break;
 
 			}
 		}
 		else if(Vector3.Distance(transform.position, Target.transform.position) > 1.6 && Vector3.Distance(transform.position, Target.transform.position) < 5){
+			movementspeed = 2;
 			var lookPos = Target.transform.position - transform.position;
 			lookPos.y = 0;
 			var rotation = Quaternion.LookRotation(lookPos);
@@ -55,9 +59,10 @@ public class Action_Manage : MonoBehaviour {
 			animator.SetBool("atackMoment",false);
 			animator.SetBool("walk",false);
 			animator.SetBool("run",true);
-			transform.Translate(Vector3.forward * 2 * Time.deltaTime);
+			transform.Translate(Vector3.forward * movementspeed * Time.deltaTime);
 		}
 		else{
+			movementspeed = 0;
 			animator.SetBool("walk",false);
 			animator.SetBool("run",false);
 			animator.SetBool("atackMoment",true);
