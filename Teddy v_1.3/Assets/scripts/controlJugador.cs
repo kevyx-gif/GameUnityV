@@ -7,7 +7,6 @@ public class controlJugador : MonoBehaviour
     private Animator animator;
     private new Rigidbody rigidbody;
     private float jumpForce = 4;
-    private bool inAttack;
     private CapsuleCollider m_boxCollider;
     private bool isGrounded; // Boolean para ser seguro que tocamos el suelo
 
@@ -19,11 +18,14 @@ public class controlJugador : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         isGrounded = true;
+        animator.SetBool("infloor",true);
+        animator.ResetTrigger("jump");
     }
 
     void OnCollisionExit(Collision collision){
 
         isGrounded = false;
+        animator.SetBool("infloor",false);
     }
 
     void Start()
@@ -37,28 +39,11 @@ public class controlJugador : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log("combos" + combo.ToString());
         float hor = Input.GetAxis("Horizontal");
         float ver = Input.GetAxis("Vertical");
         Vector3 velocity = Vector3.zero;
         float movementspeed = 0;
-
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded){
-            animator.SetTrigger("jump");
-            rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-        }
-
-        if(Input.GetKeyDown(KeyCode.Mouse0)){
-            inAttack = true;
-            animator.SetTrigger("attack");
-        }
-
-        if(Input.GetKeyDown("c")){
-            speed = 4;
-        }
-
-        else if(Input.GetKeyUp("c")){
-            speed = 2;
-        }
 
 
         if (hor != 0 || ver != 0){
@@ -82,16 +67,6 @@ public class controlJugador : MonoBehaviour
             
         }
 
-        if(isGrounded == false){
-            animator.SetBool("infloor",false);
-        }
-
-        if(isGrounded == true){
-            animator.SetBool("infloor",true);
-            animator.ResetTrigger("jump");
-        }
-
-
         velocity.y = rigidbody.velocity.y;
         rigidbody.velocity = velocity;
 
@@ -101,16 +76,26 @@ public class controlJugador : MonoBehaviour
         else{
             animator.SetBool("walk", false );
         }
+
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded){
+            animator.SetTrigger("jump");
+            rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Mouse0)){
+            animator.SetTrigger("attack");
+        }
+
+        if(Input.GetKeyDown("c")){
+            animator.SetBool("isrun",true);
+            speed = 4;
+        }
+
+        else if(Input.GetKeyUp("c")){
+            animator.SetBool("isrun",false);
+            speed = 2;
+        }
         
     }
-
-
-    private void FixedUpdate(){
-        if(inAttack){
-            inAttack = false;
-            animator.ResetTrigger("attack");
-        }
-    }
-
 
 }
