@@ -6,18 +6,32 @@ public class controlJugador : MonoBehaviour
 {
     private Animator animator;
     private new Rigidbody rigidbody;
-    private float jumpForce = 5;
-    private bool injump;
+    private float jumpForce = 4;
     private bool inAttack;
-    private bool canJump;
+    private CapsuleCollider m_boxCollider;
+    private bool isGrounded; // Boolean para ser seguro que tocamos el suelo
 
     public new Transform camera;
-    public float speed = 4;
+    public float speed = 2;
     // Start is called before the first frame update
+
+
+    void OnCollisionEnter(Collision collision)
+    {
+        isGrounded = true;
+    }
+
+    void OnCollisionExit(Collision collision){
+
+        isGrounded = false;
+    }
+
     void Start()
     {
+        m_boxCollider = GetComponent<CapsuleCollider>();
         rigidbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        isGrounded = true;
     }
 
     // Update is called once per frame
@@ -27,18 +41,23 @@ public class controlJugador : MonoBehaviour
         float ver = Input.GetAxis("Vertical");
         Vector3 velocity = Vector3.zero;
         float movementspeed = 0;
-        canJump = true;
 
-        if(Input.GetKeyDown(KeyCode.Space) && canJump == true){
-            injump = true;
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded){
             animator.SetTrigger("jump");
-            canJump = false;
-            animator.SetBool("infloor",false);
+            rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
 
         if(Input.GetKeyDown(KeyCode.Mouse0)){
             inAttack = true;
             animator.SetTrigger("attack");
+        }
+
+        if(Input.GetKeyDown("c")){
+            speed = 4;
+        }
+
+        else if(Input.GetKeyUp("c")){
+            speed = 2;
         }
 
 
@@ -63,23 +82,30 @@ public class controlJugador : MonoBehaviour
             
         }
 
-        if(injump && animator.GetBool("infloor") == false){
-            rigidbody.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
-            animator.ResetTrigger("jump");
+        if(isGrounded == false){
+            animator.SetBool("infloor",false);
+        }
+
+        if(isGrounded == true){
             animator.SetBool("infloor",true);
-            canJump = true;
+            animator.ResetTrigger("jump");
         }
 
 
         velocity.y = rigidbody.velocity.y;
         rigidbody.velocity = velocity;
 
-        animator.SetFloat("Speed", movementspeed );
+        if(rigidbody.velocity.x != 0 || rigidbody.velocity.z !=0){
+            animator.SetBool("walk", true );
+        }
+        else{
+            animator.SetBool("walk", false );
+        }
+        
     }
 
 
     private void FixedUpdate(){
-
         if(inAttack){
             inAttack = false;
             animator.ResetTrigger("attack");

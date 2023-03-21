@@ -932,7 +932,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 1.42
   m_Direction: 1
-  m_Center: {x: 0, y: 0.71, z: 0}
+  m_Center: {x: 0, y: 0.74, z: 0}
 --- !u!4 &1486505255 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2066896392038131574, guid: 45288819fde2143449a96207b14db0bb, type: 3}
@@ -951,7 +951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 963194228}
-  speed: 4
+  speed: 2
 --- !u!54 &1486505258
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -967,7 +967,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1 &1547757985
 GameObject:
   m_ObjectHideFlags: 0
