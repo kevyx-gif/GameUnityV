@@ -9,6 +9,7 @@ public class controlJugador : MonoBehaviour
     private float jumpForce = 5;
     private bool injump;
     private bool inAttack;
+    private bool canJump;
 
     public new Transform camera;
     public float speed = 4;
@@ -25,12 +26,14 @@ public class controlJugador : MonoBehaviour
         float hor = Input.GetAxis("Horizontal");
         float ver = Input.GetAxis("Vertical");
         Vector3 velocity = Vector3.zero;
-        animator.SetBool("infloor", true);
         float movementspeed = 0;
+        canJump = true;
 
-        if(Input.GetKeyDown(KeyCode.Space)){
+        if(Input.GetKeyDown(KeyCode.Space) && canJump == true){
             injump = true;
             animator.SetTrigger("jump");
+            canJump = false;
+            animator.SetBool("infloor",false);
         }
 
         if(Input.GetKeyDown(KeyCode.Mouse0)){
@@ -60,6 +63,14 @@ public class controlJugador : MonoBehaviour
             
         }
 
+        if(injump && animator.GetBool("infloor") == false){
+            rigidbody.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
+            animator.ResetTrigger("jump");
+            animator.SetBool("infloor",true);
+            canJump = true;
+        }
+
+
         velocity.y = rigidbody.velocity.y;
         rigidbody.velocity = velocity;
 
@@ -68,12 +79,6 @@ public class controlJugador : MonoBehaviour
 
 
     private void FixedUpdate(){
-        if(injump && animator.GetBool("infloor") == true){
-            rigidbody.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
-            injump = false;
-            animator.ResetTrigger("jump");
-            animator.SetBool("infloor",false);
-        }
 
         if(inAttack){
             inAttack = false;
