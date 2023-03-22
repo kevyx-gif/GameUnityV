@@ -6,9 +6,13 @@ public class controlJugador : MonoBehaviour
 {
     private Animator animator;
     private new Rigidbody rigidbody;
-    private float jumpForce = 4;
+    private float jumpForce = 6;
     private CapsuleCollider m_boxCollider;
     private bool isGrounded; // Boolean para ser seguro que tocamos el suelo
+    private bool canjump = true;
+
+    public float atackCooldown = 0.25f;
+    float lastAtackTime = 0;
 
     public new Transform camera;
     public float speed = 2;
@@ -17,13 +21,14 @@ public class controlJugador : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        canjump = true;
         isGrounded = true;
         animator.SetBool("infloor",true);
         animator.ResetTrigger("jump");
     }
 
     void OnCollisionExit(Collision collision){
-
+        canjump = false;
         isGrounded = false;
         animator.SetBool("infloor",false);
     }
@@ -39,7 +44,7 @@ public class controlJugador : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log("combos" + combo.ToString());
+        //Debug.Log("combos " + combo.ToString() + " puede combear "+canCombo + " puede atacar "+ canAttack + " in floor " + animator.GetBool("infloor"));
         float hor = Input.GetAxis("Horizontal");
         float ver = Input.GetAxis("Vertical");
         Vector3 velocity = Vector3.zero;
@@ -77,13 +82,24 @@ public class controlJugador : MonoBehaviour
             animator.SetBool("walk", false );
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded){
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded && canjump){
             animator.SetTrigger("jump");
             rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
 
         if(Input.GetKeyDown(KeyCode.Mouse0)){
-            animator.SetTrigger("attack");
+            atack();
+        }
+
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("AttackCombo03")){
+            atackCooldown = 2f;
+        }
+        else if(animator.GetCurrentAnimatorStateInfo(0).IsName("JumpAttack")){
+            atackCooldown = 1f;
+            animator.ResetTrigger("attack");
+        }
+        else if(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle_Battle")){
+            atackCooldown = 0.25f;
         }
 
         if(Input.GetKeyDown("c")){
@@ -96,6 +112,16 @@ public class controlJugador : MonoBehaviour
             speed = 2;
         }
         
+    }
+
+    void atack(){
+        if(Time.time - lastAtackTime > atackCooldown){
+            animator.SetTrigger("attack");
+            lastAtackTime = Time.time;
+        }
+        else{
+            animator.ResetTrigger("attack");
+        }
     }
 
 }
