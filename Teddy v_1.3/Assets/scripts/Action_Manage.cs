@@ -11,6 +11,29 @@ public class Action_Manage : MonoBehaviour {
 	public float grado;
 	float movementspeed = 0;
 	// Use this for initialization
+	private void OnCollisionEnter(Collision collision)
+    {
+		Debug.Log("coll aceptado");
+        if (collision.gameObject.CompareTag("weaponPlayer"))
+        {
+			Debug.Log("coll pegado");
+            // Reproducir animación de recibir golpes
+            animator.SetTrigger("RecibirGolpe");
+        }
+		
+		if(collision.gameObject.CompareTag("Player")){
+			transform.Translate(Vector3.zero);
+		}
+    }
+
+	private void OnCollisionExit(Collision collision){
+		if(collision.gameObject.CompareTag("weaponPlayer")){
+			animator.ResetTrigger("RecibirGolpe");
+		}
+
+	}
+
+
 	void Start () {
 		animator = GetComponent<Animator>();
 	}
@@ -50,7 +73,7 @@ public class Action_Manage : MonoBehaviour {
 
 			}
 		}
-		else if(Vector3.Distance(transform.position, Target.transform.position) > 1.6 && Vector3.Distance(transform.position, Target.transform.position) < 5){
+		else if(Vector3.Distance(transform.position, Target.transform.position) > 2 && Vector3.Distance(transform.position, Target.transform.position) < 5){
 			movementspeed = 2;
 			var lookPos = Target.transform.position - transform.position;
 			lookPos.y = 0;
